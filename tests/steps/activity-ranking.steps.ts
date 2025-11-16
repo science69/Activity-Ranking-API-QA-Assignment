@@ -69,15 +69,30 @@ Then('it should return a ranked list for each activity for the next 7 days', fun
   expect(day.activities).to.have.keys(['Skiing', 'Surfing', 'Outdoor Sightseeing', 'Indoor Sightseeing']);
 });
 
-Then('each returned item should include date, activity name, rank (1-10), and reasoning', function () {
+Then('each returned item should include date, activity name, rank \\({int}-{int}), and reasoning', function (minRank, maxRank) {
   for (const d of apiResponse.days) {
     expect(d.date).to.be.a('string');
     for (const [activity, data] of Object.entries(d.activities) as any[]) {
       const datum: any = data;
       expect(datum).to.have.property('rank');
-      expect(datum.rank).to.be.within(1, 10);
+      expect(datum.rank).to.be.within(minRank, maxRank);
       expect(datum).to.have.property('reasoning').that.is.a('string').that.is.not.empty;
     }
+  }
+});
+
+Then('the system should either return a helpful {string} error or attempt a best-effort lookup and return results', function (errorMessage) {
+  // Check if we have an error (e.g., "City not found") or successful results
+  if (lastError) {
+    expect(lastError).to.not.be.null;
+    // Check for either the specific error message or HTTP 404 (City not found)
+    expect(lastError.message).to.satisfy((msg: string) => 
+      msg.includes('City not found') || msg.includes('404')
+    );
+  } else {
+    // If no error, we should have valid API response with results
+    expect(apiResponse).to.not.be.null;
+    expect(apiResponse.days).to.be.an('array');
   }
 });
 

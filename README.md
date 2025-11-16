@@ -3,7 +3,7 @@ Activity Ranking API – City-Based Weather Forecast Integration with Search Sug
 
 Overview
 
-This repository contains QA artifacts and a small test harness to validate an Activity Ranking API that accepts a city name and returns ranked activities (Skiing, Surfing, Outdoor Sightseeing, Indoor Sightseeing) for the next 7 days. It also verifies autocomplete suggestions as the user types.
+This repo includes the QA documentation and a simple test setup for checking the Activity Ranking API. The API takes a city name and returns a ranking of activities (Skiing, Surfing, Outdoor Sightseeing, Indoor Sightseeing) for the upcoming week. It also covers testing the autocomplete suggestions that appear as a user types.
 
 Contents
 
@@ -29,4 +29,73 @@ How to run the mock server and tests
 
 Notes
 - The mock server returns deterministic responses to simplify assertions in the automated tests. It also simulates validation errors and not-found responses.
-- If you have a real API to test, update `BASE_URL` in `tests/steps/activity-ranking.steps.ts` to point to it and stop the mock server.
+- If there is a real API to test, just update `BASE_URL` in `tests/steps/activity-ranking.steps.ts` to point to it and stop the mock server.
+
+- How AI Assisted Me:
+
+AI tools (such as ChatGPT and GitHub Copilot) were used to speed up certain parts of the process, but not to fully generate the final deliverables. I used AI mainly for:
+
+Suggesting boilerplate code patterns for Cucumber step definitions and test setup.
+
+Rewording and simplifying explanations in the README.
+
+All test logic, validations, assertions, and scenario decisions were reviewed and adjusted manually to ensure they aligned realistically with the feature requirements and with typical QA best practices. AI suggestions were treated as drafts and not accepted without verification.
+
+Omissions & Trade-offs (Example Answer)
+
+Given the short timeframe for this task (2–3 hours), I had to make a few intentional trade-offs:
+
+1. Limited API Mocking
+
+I used simplified or static mocks instead of building a full dynamic mock of the Open-Meteo API.
+A more complete setup would include:
+
+Contract testing
+
+Swagger/OpenAPI validation
+
+Mock server with dynamic responses
+
+These were omitted due to time constraints.
+
+2. Partial Automation Coverage
+
+Only the core scenarios defined in the BDD feature file were automated.
+Additional scenarios that I would normally include, but did not due to time, include:
+
+Load/performance behavior (e.g., 429 responses)
+
+Fuzzy-matching for city names
+
+The selected tests focus instead on functional correctness.
+
+3. Reduced Data Validation Complexity
+
+The weather-based ranking algorithm can get very complex, so I only validated:
+
+Correct structure of the response
+
+Correct ranking order based on simple mocked rules
+
+A full solution might:
+
+Validate all possible weather patterns
+
+Test cross-comparison of multiple activities under varying conditions
+
+This was out of scope for the time limit.
+
+4. Simplified Test Harness
+
+I intentionally avoided over-engineering the automation framework.
+In a real project, I would structure it with:
+
+Page object models (if UI existed)
+
+API client utilities
+
+Centralized fixtures
+
+CI pipeline integration
+
+For this exercise, I kept the setup minimal to keep focus on clarity and test design.

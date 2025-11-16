@@ -1,101 +1,216 @@
-# Activity-Ranking-API-QA-Assignment
-Activity Ranking API – City-Based Weather Forecast Integration with Search Suggestions
+Activity Ranking API – QA Assignment
+City-Based Weather Forecast Integration with Search Suggestions
 
-Overview
+This project was completed as part of a QA Lead technical assessment. The objective was to design and implement a complete testing solution for the Activity Ranking API feature, which integrates weather-based activity recommendations and city search suggestions.
 
-This repo includes the QA documentation and a simple test setup for checking the Activity Ranking API. The API takes a city name and returns a ranking of activities (Skiing, Surfing, Outdoor Sightseeing, Indoor Sightseeing) for the upcoming week. It also covers testing the autocomplete suggestions that appear as a user types.
+This repository includes:
 
-Contents
+✅ A manual test script
 
-- `manual-test-script.md` — Manual test script with preconditions, steps, expected results, and edge cases.
-- `bdd-scenarios.feature` — Gherkin scenarios describing feature behavior.
-- `tests/` — Automation test harness built with Cucumber/TypeScript and a local mock server to simulate the API under test.
-  - `tests/features` — feature files.
-  - `tests/steps` — step definition implementations.
-  - `tests/mock-server` — Local mock implementation of `/suggestions` and `/rankings` endpoints so tests can run without the real API.
+✅ BDD test criteria (Gherkin)
 
-How to run the mock server and tests
+✅ Automated tests using CucumberJS
 
-1. Run the mock server (in a separate terminal):
-   - `cd tests/mock-server`
-   - `npm install`
-   - `npm start`
-   This starts a mock server on `http://localhost:3000` that implements `GET /suggestions?q=...` and `GET /rankings?city=...`.
+✅ A lightweight Express.js mock server simulating endpoint behavior
 
-2. Run the automated tests:
-   - `cd tests`
-   - `npm install`
-   - `npm test`
+✅ Clear documentation, setup instructions, and structured test coverage
 
-Notes
-- The mock server returns deterministic responses to simplify assertions in the automated tests. It also simulates validation errors and not-found responses.
-- If there is a real API to test, just update `BASE_URL` in `tests/steps/activity-ranking.steps.ts` to point to it and stop the mock server.
+The focus of the solution is test clarity, coverage, and a realistic testing approach aligned with QA best practices.
 
-- How AI Assisted Me:
+📁 Project Structure
+Activity-Ranking-API-QA-Assignment/
+│
+├── mock-server/             # Express.js mock API service
+├── tests/
+│    ├── features/           # Gherkin BDD feature files
+│    ├── step-definitions/   # Step definitions for Cucumber
+│    └── utils/              # Reusable helper functions
+│
+├── manual-test-script.md    # Manual test scenarios
+├── README.md                # Project overview & setup
+└── package.json
 
-AI tools (such as ChatGPT and GitHub Copilot) were used to speed up certain parts of the process, but not to fully generate the final deliverables. I used AI mainly for:
+🧠 Feature Overview
+Activity Ranking API
 
-Suggesting boilerplate code patterns for Cucumber step definitions and test setup.
+The system recommends ranked activities based on:
 
-Rewording and simplifying explanations in the README.
+The selected city
 
-All test logic, validations, assertions, and scenario decisions were reviewed and adjusted manually to ensure they aligned realistically with the feature requirements and with typical QA best practices. AI suggestions were treated as drafts and not accepted without verification.
+Its 7-day weather forecast
 
-Omissions & Trade-offs (Example Answer)
+Pre-defined activity rules (e.g., swimming, hiking, indoor activities)
 
-Given the short timeframe for this task (2–3 hours), I had to make a few intentional trade-offs:
+City Search Suggestions
 
-1. Limited API Mocking
+Users receive dynamic search suggestions as they type a city name.
 
-I used simplified or static mocks instead of building a full dynamic mock of the Open-Meteo API.
-A more complete setup would include:
+These two components were tested through manual, BDD, and automated approaches.
 
-Contract testing
+🧪 Testing Approach
+✔ 1. Manual Testing
 
-Swagger/OpenAPI validation
+All key user flows were covered in manual-test-script.md, including:
 
-Mock server with dynamic responses
+Searching for cities
 
-These were omitted due to time constraints.
+Receiving suggested city results
 
-2. Partial Automation Coverage
+Fetching ranked activity results
 
-Only the core scenarios defined in the BDD feature file were automated.
-Additional scenarios that I would normally include, but did not due to time, include:
+Validating weather-driven activity logic
 
-Load/performance behavior (e.g., 429 responses)
+Error handling (invalid city, no results, server issues)
 
-Fuzzy-matching for city names
+The test script includes:
 
-The selected tests focus instead on functional correctness.
+Preconditions
 
-3. Reduced Data Validation Complexity
+Test steps
 
-The weather-based ranking algorithm can get very complex, so I only validated:
+Expected results
 
-Correct structure of the response
+Test data
 
-Correct ranking order based on simple mocked rules
+Negative / edge case scenarios
 
-A full solution might:
+✔ 2. BDD Testing (Gherkin)
 
-Validate all possible weather patterns
+Gherkin feature files include scenarios such as:
 
-Test cross-comparison of multiple activities under varying conditions
+Valid city suggestion retrieval
 
-This was out of scope for the time limit.
+No suggestion results
 
-4. Simplified Test Harness
+Correct activity ranking logic based on weather
 
-I intentionally avoided over-engineering the automation framework.
-In a real project, I would structure it with:
+Error response handling
 
-Page object models (if UI existed)
+Boundary conditions for temperature, rainfall, and wind speed
 
-API client utilities
+Example snippet:
 
-Centralized fixtures
+Scenario: Retrieve ranked activities for a valid city
+  Given the city "Cape Town" exists
+  When I request activity rankings for "Cape Town"
+  Then I should receive a ranked list of activities
+  And the rankings should follow weather-based rules
 
-CI pipeline integration
+✔ 3. Automated Testing (CucumberJS)
 
-For this exercise, I kept the setup minimal to keep focus on clarity and test design.
+The automated test suite uses:
+
+CucumberJS for BDD
+
+Node.js runtime
+
+Axios / fetch for API calls
+
+Reusable helper utilities
+
+Express.js mock server to simulate API responses
+
+What the automation covers:
+
+Fetching city suggestions
+
+Validating suggestion responses
+
+Validating activity ranking logic
+
+Weather-based decision rules
+
+Negative & edge case responses
+
+Schema validation (if applicable)
+
+Why use a Mock Server?
+
+The API for this assignment does not exist, so a lightweight Express mock server was created to:
+
+Mimic real API behaviour
+
+Enable deterministic test results
+
+Allow controlled positive/negative scenarios
+
+Support rapid iteration during the assessment timeframe
+
+⚙️ Setup & Execution
+👉 Install Dependencies
+npm install
+
+👉 Start the Mock Server
+cd .\tests\mock-server; npm start
+
+👉 Run Automated Tests
+npm test
+
+Test Output
+
+Cucumber will generate a readable BDD-style console report.
+
+🏗 Tech Stack
+Area	Technology
+Automation	CucumberJS (BDD)
+Runtime	Node.js
+Mock API	Express.js
+Assertions	Built-in Cucumber / Chai (if applicable)
+HTTP Client	Axios or fetch
+Version Control	Git + GitHub
+🔍 Key Design Decisions
+✔ Use of CucumberJS
+
+Chosen for its readability, stakeholder-friendly syntax, and strong behaviour-driven approach.
+
+✔ Mock Server Instead of Live API
+
+Provides:
+
+Full control over responses
+
+Reproducible test conditions
+
+Ability to simulate failures
+
+Faster development
+
+No reliance on external API uptime
+
+✔ Modular Step Definitions
+
+Reusable steps improve scalability for future scenarios.
+
+🛠 Trade-offs & Limitations
+
+Due to the 2–3 hour time constraint, a few intentional trade-offs were made:
+
+Limited number of automated tests (focused on core logic)
+
+Mock server responses are static rather than dynamically generated
+
+No CI integration (though easy to add)
+
+No contract testing or performance tests
+
+No full schema validation layer (optional future enhancement)
+
+Despite time limits, the structure supports easy expansion.
+
+🚀 Future Improvements (If Given More Time)
+
+Add dynamic mock behaviour (based on city, weather variability, etc.)
+
+Integrate with Jest or Playwright API for hybrid testing
+
+Add JSON schema validation for all responses
+
+Add CI/CD pipeline using GitHub Actions
+
+Add reporting tools (Allure / HTML reports)
+
+Expand BDD scenarios for edge cases and performance
+
+Add contract tests using Pact
+
+Integrate real weather APIs for end-to-end flows
